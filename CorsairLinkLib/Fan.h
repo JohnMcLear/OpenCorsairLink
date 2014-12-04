@@ -19,7 +19,8 @@
 #ifndef _CORSAIRFAN_H
 #define _CORSAIRFAN_H
 
-typedef struct {
+typedef struct _CorsairFanInfo {
+    _CorsairFanInfo() { Name=NULL; RPM=0; Mode=0; }
 	char* Name;
 	int RPM;
 	int Mode;
