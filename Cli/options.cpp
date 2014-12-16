@@ -71,9 +71,11 @@ void printHelp() {
 	fprintf(stdout, "\t\t\t\t 0x40 - 2-Color Cycle (requries to specify RGB1 & RGB2)\n");
 	fprintf(stdout, "\t\t\t\t 0x80 - 4-Color Cycle (requires to specify RGB1, RGB2, RGB3, & RGB4)\n");
 	fprintf(stdout, "\t\t\t\t 0xC0 - Temperature Mode (requires to specify RGB1, RGB2, & RGB3)\n");
-	fprintf(stdout, "\t\t\t\t\tLow Nibble controls Cycle Speed or Temperature Channel\n");
+    fprintf(stdout, "\t\t\tIt is not necessary to use 0x on the command line\n");
+    fprintf(stdout, "\t\t\t\t\tLow Nibble (2nd hex digit) controls Cycle Speed or Temperature Channel\n");
 	fprintf(stdout, "\t\t\t\t\t(0 = internal sensor; 7 = manual)\n");
-	fprintf(stdout, "\t\t--rgb1 <HTML Color Code> :Define Color for LEDs\n");
+    fprintf(stdout, "\t\t\t\t\t(0 = slow; F = fast\n");
+    fprintf(stdout, "\t\t--rgb1 <HTML Color Code> :Define Color for LEDs\n");
 	fprintf(stdout, "\t\t--rgb2 <HTML Color Code> :Define Color for LEDs\n");
 	fprintf(stdout, "\t\t--rgb3 <HTML Color Code> :Define Color for LEDs\n");
 	fprintf(stdout, "\t\t--rgb4 <HTML Color Code> :Define Color for LEDs\n");
@@ -104,6 +106,7 @@ int parseArguments(int argc, char **argv, int &info,
 	char sep;
 	while (1) {
 		int option_index = 0;
+        int offset=0;
 
 		c = getopt_long (argc, argv, "hil:t:f:p", long_options, &option_index);
 		if (c == -1 || returnCode != 0)
@@ -117,7 +120,10 @@ int parseArguments(int argc, char **argv, int &info,
 			}
 			break;
 		case 10://led-mode
-			sscanf(optarg, "%2x", &ledMode);
+            if (optarg[1]=='x'||optarg[1]=='X') {
+                offset=2;
+            }
+            sscanf(optarg+offset, "%2x", &ledMode);
 			break;
 		case 11://rpg1
 			sscanf(optarg, "%2x%2x%2x", &leds[0].red, &leds[0].green, &leds[0].blue);
